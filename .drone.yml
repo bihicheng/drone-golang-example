@@ -1,26 +1,15 @@
-kind: pipeline
-type: docker
-name: node1
+clone:
+  git:
+    image: plugins/git
+    depth: 50
+    tags: true
 
-steps:
-- name: build
-  image: golang:1.13
-  commands:
-  - make build_linux_amd64
+pipeline:
+  build:
+    image: appleboy/golang-testing
+    pull: true
+    commands:
+      - coverage all
+      - make release
+      - echo Done
 
-node:
-  project: foo
-
----
-kind: pipeline
-type: docker
-name: node2
-
-steps:
-- name: build
-  image: golang:1.13
-  commands:
-  - make build_linux_amd64
-
-node:
-  project: bar
